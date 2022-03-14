@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-deployment
+  labels:
+    app: book
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: book
+  template:
+    metadata:
+      labels:
+        app: book
+    spec:
+      containers:
+      - name: book
+        image: trnayak11/crud:1.0
+        ports:
+        - containerPort: 8080
+        #startupProbe:
+          #httpGet:
+            #path: /addrecord
+            #port: 8080
+          #failureThreshold: 30
+          #periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /addrecord
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 60
+          timeoutSeconds: 30
+        readinessProbe:
+          httpGet:
+             path: /addrecord
+             port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 60
+          timeoutSeconds: 30
